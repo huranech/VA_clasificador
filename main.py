@@ -42,8 +42,11 @@ if __name__ == "__main__":
         # seleccionar la columna a la que se le va a someter a preproceso
         documentos_crudos = df[select]
 
-        # preprocesar texto
-        documentos_preprocesados = preprocessor.tfidf(documentos_crudos)
+        # preprocesar texto en función de la técnica de vectorización seleccionada
+        if parameters == "tfidf":
+            documentos_preprocesados = preprocessor.tfidf(documentos_crudos)
+        elif parameters == "we":
+            documentos_preprocesados = preprocessor.we(documentos_crudos)
 
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)

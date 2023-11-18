@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 def entrenar_svm(x_matrix, y_labels, output_file):
     
     # separar train y test (70%-30%)
-    y_train, y_test = train_test_split(y_labels, test_size=0.3, random_state=42)
-    x_train, x_test = train_test_split(x_matrix, test_size=0.3, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(x_matrix, y_labels, test_size=0.3, random_state=42)
 
     # entrenar un modelo SVM
     clf = svm.SVC(kernel='linear')
