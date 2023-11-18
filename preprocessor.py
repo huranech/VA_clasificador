@@ -8,6 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from transformers import AutoTokenizer, AutoModel
 import torch
+from sklearn.feature_extraction.text import CountVectorizer
 
 nltk.download('stopwords')  # Descarga la lista de stop words en inglés
 nltk.download('averaged_perceptron_tagger')
@@ -143,6 +144,16 @@ def preprocesar_texto(texto_crudo):
             listaFilas.append(texto)
     columnaProcesada = pd.Series(listaFilas)
     return columnaProcesada
+
+
+def bow(documentos):
+    '''
+    '''
+    vectorizer = CountVectorizer()
+    bagofwords = vectorizer.fit_transform(documentos)
+    matriz_bow = bagofwords.toarray()
+    print(matriz_bow)
+    #return matriz_bow
 
 
 def tfidf(documentos):

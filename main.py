@@ -45,7 +45,9 @@ if __name__ == "__main__":
 
         # preprocesar texto en función de la técnica de vectorización seleccionada
         documentos_preprocesados = preprocessor.preprocesar_texto(documentos_crudos)
-        if parameters == "tfidf":
+        if parameters == "bow":
+            documentos_preprocesados = preprocessor.bow(documentos_preprocesados)
+        elif parameters == "tfidf":
             documentos_preprocesados = preprocessor.tfidf(documentos_preprocesados)
         elif parameters == "we":
             documentos_preprocesados = preprocessor.we(documentos_preprocesados)
