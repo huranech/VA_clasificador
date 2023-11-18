@@ -150,8 +150,19 @@ def tfidf(documentos):
 def we(documentos):
     '''
     '''
-    pass
+    tokenized_data = [doc.split() for doc in documentos]
+    tagged_data = [TaggedDocument(words=words, tags=[str(idx)]) for idx, words in enumerate(tokenized_data)]
 
+    # Crear y entrenar el modelo Doc2Vec
+    model = Doc2Vec(vector_size=100, min_count=1, epochs=10)
+    model.build_vocab(tagged_data)
+    model.train(tagged_data, total_examples=model.corpus_count, epochs=model.epochs)
+
+    # Obtener los vectores de los documentos
+    vectores_documentos = [model.infer_vector(words) for words in tokenized_data]
+
+    print(vectores_documentos)
+    return vectores_documentos
 
 def transformers(documentos):
     '''
