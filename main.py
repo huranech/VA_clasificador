@@ -8,7 +8,6 @@ import preprocessor
 import pandas as pd
 
 
-
 if __name__ == "__main__":
 
     input_args = sys.argv[1:]
@@ -66,6 +65,7 @@ if __name__ == "__main__":
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)
     
+
     if command == "classify":
         input_file = input_file.split(",")
 
@@ -84,6 +84,7 @@ if __name__ == "__main__":
 
         # guardar modelo
         joblib.dump(modelo, output_file)
+    
     
     else:
         print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess' o 'classify'")
