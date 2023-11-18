@@ -1,7 +1,6 @@
 from sklearn import svm
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import precision_score, recall_score, f1_score, roc_curve, auc
-import matplotlib.pyplot as plt
+from sklearn.metrics import precision_score, recall_score, f1_score
 
 
 def entrenar_svm(x_matrix, y_labels, output_file):

@@ -1,6 +1,5 @@
-from sklearn.preprocessing import LabelEncoder
 import pandas as pd
-from collections import OrderedDict
+from sklearn.preprocessing import LabelEncoder
 
 
 def mapeo_a_numeros(y_labels):

@@ -1,13 +1,13 @@
 import string
 import nltk
-import pandas as pd
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import stopwords
-from nltk.corpus import wordnet
-from sklearn.feature_extraction.text import TfidfVectorizer
-from gensim.models.doc2vec import Doc2Vec, TaggedDocument
-from transformers import AutoTokenizer, AutoModel
 import torch
+import pandas as pd
+from nltk.corpus import wordnet
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from transformers import AutoTokenizer, AutoModel
+from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 
 nltk.download('stopwords')  # Descarga la lista de stop words en inglés
@@ -143,7 +143,7 @@ def preprocesar_texto(texto_crudo):
         if texto is not None:       # Puede ser None si se ha eliminado por no tener información relevante
             listaFilas.append(texto)
     columnaProcesada = pd.Series(listaFilas)
-    
+
     return columnaProcesada
 
 
@@ -184,6 +184,7 @@ def we(documentos):
     vectores_documentos = [model.infer_vector(words) for words in tokenized_data]
 
     return vectores_documentos
+
 
 def transformers(documentos):
 
