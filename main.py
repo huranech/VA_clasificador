@@ -1,8 +1,11 @@
+import os
 import sys
 import getopt
 import joblib
+import classifier
 import preprocessor
 import pandas as pd
+
 
 
 if __name__ == "__main__":
@@ -40,8 +43,22 @@ if __name__ == "__main__":
         documentos_crudos = df[select]
 
         # preprocesar texto
-        documentos_preprocesados = preprocessor.we(documentos_crudos)
+        documentos_preprocesados = preprocessor.tfidf(documentos_crudos)
 
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)
     
+    if command == "classify":
+        input_file = input_file.split(",")
+
+        # obtener los datos de entrenamiento
+        df = pd.read_csv(input_file[0])
+
+        y_labels = df[select]
+        x_matrix = joblib.load(input_file[1])
+
+        # realizar predicciones y evaluar resultados
+        modelo = classifier.entrenar_svm(x_matrix, y_labels, output_file)
+
+        # guardar modelo
+        joblib.dump(modelo, output_file)

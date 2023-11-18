@@ -1,12 +1,12 @@
 import string
 import nltk
 import pandas as pd
-import numpy as np
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+
 nltk.download('stopwords')  # Descarga la lista de stop words en inglés
 
 
@@ -154,46 +154,17 @@ def we(documentos):
     tagged_data = [TaggedDocument(words=words, tags=[str(idx)]) for idx, words in enumerate(tokenized_data)]
 
     # Crear y entrenar el modelo Doc2Vec
-    model = Doc2Vec(vector_size=100, min_count=1, epochs=10)
+    model = Doc2Vec(vector_size=100, min_count=1, epochs=100, workers=2)
     model.build_vocab(tagged_data)
     model.train(tagged_data, total_examples=model.corpus_count, epochs=model.epochs)
 
     # Obtener los vectores de los documentos
     vectores_documentos = [model.infer_vector(words) for words in tokenized_data]
 
-    print(vectores_documentos)
     return vectores_documentos
+
 
 def transformers(documentos):
     '''
     '''
     pass
-
-
-def obtenerWE(documents, vector_size=1000, window=5, min_count=1):
-    '''
-    Este método devuelve la estructura de datos de Word Embedding
-    Precondiciones:
-        documents es una lista de documentos, donde cada documento es una lista de palabras.
-        vector_size es un entero que representa la dimensión del espacio vectorial de embedding (por defecto, 1000).
-        window es un entero que representa la ventana de contexto para el modelo Doc2Vec (por defecto, 5).
-        min_count es un entero que representa el número mínimo de ocurrencias de una palabra (por defecto, 1).
-    Postcondiciones:
-        La función utiliza el modelo Doc2Vec para generar representaciones vectoriales de los documentos.
-        Devuelve una matriz NumPy que contiene las representaciones vectoriales de los documentos.
-    '''
-    # Etiqueta los documentos
-    tagged_data = [TaggedDocument(words=words, tags=[str(i)]) for i, words in enumerate(documents)]
-
-    modelo = Doc2Vec(vector_size=400, window=2, min_count=1, workers=4, epochs=100)
-
-    # Construye el vocabulario
-    modelo.build_vocab(tagged_data)
-
-    # Obtiene las representaciones vectoriales de todos los documentos
-    vectors = [modelo.dv[str(i)] for i in range(len(documents))]
-
-    # Convierte la lista de vectores en una matriz NumPy
-    X = np.array(vectors)
-    
-    return X
