@@ -6,6 +6,8 @@ from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 from sklearn.feature_extraction.text import TfidfVectorizer
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
+from transformers import AutoTokenizer, AutoModel
+import torch
 
 nltk.download('stopwords')  # Descarga la lista de stop words en inglés
 
@@ -127,7 +129,7 @@ def preprocesar_texto(texto_crudo):
         texto = eliminarSiNoInfo(texto, n_palabras=3)
         texto = eliminarSignosPuntuacion(texto)
         texto = normalizarTexto(texto)
-        texto = eliminarStopWords(texto)
+        #texto = eliminarStopWords(texto)
         texto = lematizar(texto)
         if texto is not None:       # Puede ser None si se ha eliminado por no tener información relevante
             listaFilas.append(texto)
@@ -163,8 +165,25 @@ def we(documentos):
 
     return vectores_documentos
 
-
 def transformers(documentos):
-    '''
-    '''
-    pass
+
+    # Cargar el modelo preentrenado y el tokenizador
+    modelo_nombre = "bert-base-uncased"  # Puedes cambiar esto según el modelo que quieras utilizar
+    tokenizer = AutoTokenizer.from_pretrained(modelo_nombre)
+    modelo = AutoModel.from_pretrained(modelo_nombre)
+
+    # Tokenizar y obtener representación para cada documento
+    representaciones = []
+    for documento in documentos:
+        # Tokenizar el documento
+        tokens = tokenizer(documento, return_tensors="pt")
+
+        # Obtener la representación del modelo
+        with torch.no_grad():
+            salida = modelo(**tokens)
+
+        # Puedes tomar la salida de la capa de pooling para obtener una representación del documento
+        representacion_documento = torch.mean(salida.last_hidden_state, dim=1).squeeze().numpy()
+        representaciones.append(representacion_documento)
+
+    return representaciones

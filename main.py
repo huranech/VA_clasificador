@@ -48,6 +48,8 @@ if __name__ == "__main__":
             documentos_preprocesados = preprocessor.tfidf(documentos_crudos)
         elif parameters == "we":
             documentos_preprocesados = preprocessor.we(documentos_crudos)
+        elif parameters == "transformers":
+            documentos_preprocesados = preprocessor.transformers(documentos_crudos)
 
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)
