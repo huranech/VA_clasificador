@@ -37,6 +37,14 @@ if __name__ == "__main__":
 
 
     if command == "preprocess":
+        # comprobar que los parametros son correctos
+        if parameters not in ["bow", "tfidf", "we", "transformers"]:
+            print("[!]Error: el parámetro -p sólo puede tomar los valores 'bow', 'tfidf', 'we' y 'transformers'")
+            exit(0)
+        if not os.path.exists(input_file):
+            print(f"[!]Error: El archivo {input_file} no existe.")
+            exit(0)
+
         # cargar el CSV
         df = pd.read_csv(input_file)
 
@@ -45,6 +53,7 @@ if __name__ == "__main__":
 
         # preprocesar texto en función de la técnica de vectorización seleccionada
         documentos_preprocesados = preprocessor.preprocesar_texto(documentos_crudos)
+
         if parameters == "bow":
             documentos_preprocesados = preprocessor.bow(documentos_preprocesados)
         elif parameters == "tfidf":
@@ -75,3 +84,7 @@ if __name__ == "__main__":
 
         # guardar modelo
         joblib.dump(modelo, output_file)
+    
+    else:
+        print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess' o 'classify'")
+        exit(0)

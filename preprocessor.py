@@ -143,6 +143,7 @@ def preprocesar_texto(texto_crudo):
         if texto is not None:       # Puede ser None si se ha eliminado por no tener información relevante
             listaFilas.append(texto)
     columnaProcesada = pd.Series(listaFilas)
+    
     return columnaProcesada
 
 
@@ -152,8 +153,8 @@ def bow(documentos):
     vectorizer = CountVectorizer()
     bagofwords = vectorizer.fit_transform(documentos)
     matriz_bow = bagofwords.toarray()
-    print(matriz_bow)
-    #return matriz_bow
+    
+    return matriz_bow
 
 
 def tfidf(documentos):
