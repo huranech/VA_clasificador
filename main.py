@@ -2,6 +2,7 @@ import os
 import sys
 import getopt
 import joblib
+import utiles
 import classifier
 import preprocessor
 import pandas as pd
@@ -59,6 +60,10 @@ if __name__ == "__main__":
 
         y_labels = df[select]
         x_matrix = joblib.load(input_file[1])
+
+        # realizar un mapeo de y_labels a conjunto de categorías reducido y, posteriormente a datos numéricos
+        y_labels = utiles.minimalist(y_labels)
+        y_labels = utiles.mapeo_a_numeros(y_labels)
 
         # realizar predicciones y evaluar resultados
         modelo = classifier.entrenar_svm(x_matrix, y_labels, output_file)
