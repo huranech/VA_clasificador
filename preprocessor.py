@@ -10,6 +10,9 @@ from transformers import AutoTokenizer, AutoModel
 import torch
 
 nltk.download('stopwords')  # Descarga la lista de stop words en inglés
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+nltk.download('punkt')
 
 
 def normalizarTexto(texto):
@@ -71,7 +74,10 @@ def get_wordnet_pos(word):
     Postcondiciones:
         La función devuelve la categoría gramatical de la palabra en el formato utilizado por WordNet (ADJ, NOUN, VERB, ADV).
     '''
+
     tag = nltk.pos_tag([word])[0][1][0].upper()
+
+
     tag_dict = {"J": wordnet.ADJ,
                 "N": wordnet.NOUN,
                 "V": wordnet.VERB,
@@ -86,6 +92,8 @@ def lematizar(texto):
     Postcondiciones:
         La función lematiza las palabras en el texto, utilizando la categoría gramatical apropiada, y devuelve el texto lematizado.
     '''
+
+
     texto = nltk.word_tokenize(texto)
     
     # Inicializar el lematizador
@@ -129,7 +137,7 @@ def preprocesar_texto(texto_crudo):
         texto = eliminarSiNoInfo(texto, n_palabras=3)
         texto = eliminarSignosPuntuacion(texto)
         texto = normalizarTexto(texto)
-        #texto = eliminarStopWords(texto)
+        texto = eliminarStopWords(texto)
         texto = lematizar(texto)
         if texto is not None:       # Puede ser None si se ha eliminado por no tener información relevante
             listaFilas.append(texto)
@@ -168,13 +176,15 @@ def we(documentos):
 def transformers(documentos):
 
     # Cargar el modelo preentrenado y el tokenizador
-    modelo_nombre = "bert-base-uncased"  # Puedes cambiar esto según el modelo que quieras utilizar
+    modelo_nombre = "bert-base-uncased"
     tokenizer = AutoTokenizer.from_pretrained(modelo_nombre)
     modelo = AutoModel.from_pretrained(modelo_nombre)
-
+    print(len(documentos))
     # Tokenizar y obtener representación para cada documento
     representaciones = []
+    i = 0
     for documento in documentos:
+        print("documento ", i)
         # Tokenizar el documento
         tokens = tokenizer(documento, return_tensors="pt")
 
@@ -185,5 +195,6 @@ def transformers(documentos):
         # Puedes tomar la salida de la capa de pooling para obtener una representación del documento
         representacion_documento = torch.mean(salida.last_hidden_state, dim=1).squeeze().numpy()
         representaciones.append(representacion_documento)
+        i += 1
 
     return representaciones

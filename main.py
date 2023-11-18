@@ -44,12 +44,13 @@ if __name__ == "__main__":
         documentos_crudos = df[select]
 
         # preprocesar texto en función de la técnica de vectorización seleccionada
+        documentos_preprocesados = preprocessor.preprocesar_texto(documentos_crudos)
         if parameters == "tfidf":
-            documentos_preprocesados = preprocessor.tfidf(documentos_crudos)
+            documentos_preprocesados = preprocessor.tfidf(documentos_preprocesados)
         elif parameters == "we":
-            documentos_preprocesados = preprocessor.we(documentos_crudos)
+            documentos_preprocesados = preprocessor.we(documentos_preprocesados)
         elif parameters == "transformers":
-            documentos_preprocesados = preprocessor.transformers(documentos_crudos)
+            documentos_preprocesados = preprocessor.transformers(documentos_preprocesados)
 
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)
