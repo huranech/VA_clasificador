@@ -88,9 +88,21 @@ if __name__ == "__main__":
         joblib.dump(modelo, output_file)
 
     if command == "clustering":
-        datos = joblib.load(input_file)
+        input_file = input_file.split(",")
 
-        modelo = clustering.kmeans(datos, int(parameters))
+        # obtener los datos de entrenamiento
+        datos = joblib.load(input_file[1])
+
+        asig_clusters = clustering.kmeans(datos, int(parameters))
+
+        df = pd.read_csv(input_file[0])
+
+        # Añadir la columna de clusters al DataFrame
+        df['Cluster'] = asig_clusters
+
+        # Guardar el DataFrame actualizado en un nuevo archivo CSV
+        df.to_csv(output_file, index=False)
+
 
     else:
         print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess', 'classify' o 'clustering'")

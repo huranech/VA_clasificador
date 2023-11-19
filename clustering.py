@@ -38,3 +38,5 @@ def kmeans(datos, k):
 
     # Visualizar los resultados
     visualizar_clusters(datos_svd, etiquetas, centros)
+
+    return etiquetas
