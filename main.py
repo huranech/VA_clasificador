@@ -2,6 +2,8 @@ import os
 import sys
 import getopt
 import joblib
+
+import clustering
 import utiles
 import classifier
 import preprocessor
@@ -84,8 +86,12 @@ if __name__ == "__main__":
 
         # guardar modelo
         joblib.dump(modelo, output_file)
-    
-    
+
+    if command == "clustering":
+        datos = joblib.load(input_file)
+
+        modelo = clustering.kmeans(datos, int(parameters))
+
     else:
-        print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess' o 'classify'")
+        print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess', 'classify' o 'clustering'")
         exit(0)
