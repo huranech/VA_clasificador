@@ -166,6 +166,7 @@ def tfidf(documentos):
     # Ajustar el vectorizador a los documentos recibidos como parámetro
     matriz_tfidf = vectorizador.fit_transform(documentos)
 
+    print(matriz_tfidf.shape)
     return matriz_tfidf
 
 

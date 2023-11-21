@@ -8,6 +8,7 @@ import classifier
 import numpy as np
 import preprocessor
 import pandas as pd
+from scipy.sparse import issparse
 
 
 if __name__ == "__main__":
@@ -67,7 +68,6 @@ if __name__ == "__main__":
 
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)
-
         print("[*] Preproceso completado")
     
 
@@ -97,8 +97,12 @@ if __name__ == "__main__":
 
         # obtener los datos de entrenamiento
         X_matrix = joblib.load(input_file)
-        matriz_np = np.array(X_matrix)
-        print(type(X_matrix))  # <class 'list'>
+
+        # procesar si X_matrix es o no una matriz dispersa
+        if issparse(X_matrix):
+            matriz_np = X_matrix.toarray()
+        else:
+            matriz_np = np.array(X_matrix)
 
         asig_clusters = clustering.kmeans(X_matrix, int(parameters))
 
@@ -119,7 +123,6 @@ if __name__ == "__main__":
                     nueva_columna = np.append(nueva_columna, valor_minimo)
 
             # añadir una columna por cada cluster
-            print(matriz_np)
             matriz_np = np.column_stack((matriz_np, nueva_columna))
             nueva_columna = np.array([], dtype=np.float32)
 
