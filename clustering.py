@@ -4,12 +4,16 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import TruncatedSVD  # Cambio de PCA a TruncatedSVD
 
 def realizar_svd(datos, n_componentes=2):
+    '''
+    '''
     svd = TruncatedSVD(n_components=n_componentes)
     datos_svd = svd.fit_transform(datos)
     return datos_svd
 
 
 def entrenar_kmeans(datos, k):
+    '''
+    '''
     # Crear un modelo de k-means
     modelo_kmeans = KMeans(n_clusters=k)
 
@@ -24,6 +28,8 @@ def entrenar_kmeans(datos, k):
 
 
 def visualizar_clusters(datos, etiquetas, centros):
+    '''
+    '''
     plt.scatter(datos[:, 0], datos[:, 1], c=etiquetas, cmap='viridis')
     plt.scatter(centros[:, 0], centros[:, 1], marker='X', s=200, linewidths=2, color='red')
     plt.title('Resultado del Clustering')
@@ -31,6 +37,8 @@ def visualizar_clusters(datos, etiquetas, centros):
 
 
 def kmeans(datos, k):
+    '''
+    '''
     datos_svd = realizar_svd(datos, n_componentes=2)
 
     # Realizar clustering en el espacio reducido por PCA

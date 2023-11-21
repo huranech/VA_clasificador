@@ -187,17 +187,16 @@ def we(documentos):
 
 
 def transformers(documentos):
-
+    '''
+    '''
     # Cargar el modelo preentrenado y el tokenizador
     modelo_nombre = "bert-base-uncased"
     tokenizer = AutoTokenizer.from_pretrained(modelo_nombre)
     modelo = AutoModel.from_pretrained(modelo_nombre)
-    print(len(documentos))
     # Tokenizar y obtener representación para cada documento
     representaciones = []
     i = 0
     for documento in documentos:
-        print("documento ", i)
         # Tokenizar el documento
         tokens = tokenizer(documento, return_tensors="pt")
 

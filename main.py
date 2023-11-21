@@ -67,6 +67,8 @@ if __name__ == "__main__":
 
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)
+
+        print("[*] Preproceso completado")
     
 
     elif command == "classify":
@@ -88,6 +90,7 @@ if __name__ == "__main__":
 
         # guardar modelo
         joblib.dump(modelo, output_file)
+        print("[*] Tarea finalizada")
 
     elif command == "clustering":
         print("[*] Tarea de clustering en marcha...")
@@ -116,12 +119,14 @@ if __name__ == "__main__":
                     nueva_columna = np.append(nueva_columna, valor_minimo)
 
             # añadir una columna por cada cluster
+            print(matriz_np)
             matriz_np = np.column_stack((matriz_np, nueva_columna))
             nueva_columna = np.array([], dtype=np.float32)
 
         # guardar la estructura matricial en el directorio de trabajo
         joblib.dump(matriz_np, output_file)
 
+        print("[*] Tarea finalizada")
     else:
         print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess', 'classify' o 'clustering'")
         exit(0)
