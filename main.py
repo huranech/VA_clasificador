@@ -2,10 +2,10 @@ import os
 import sys
 import getopt
 import joblib
-
-import clustering
 import utiles
+import clustering
 import classifier
+import numpy as np
 import preprocessor
 import pandas as pd
 
@@ -38,6 +38,7 @@ if __name__ == "__main__":
 
 
     if command == "preprocess":
+        print("[*] preprocesando dataset...")
         # comprobar que los parametros son correctos
         if parameters not in ["bow", "tfidf", "we", "transformers"]:
             print("[!]Error: el parámetro -p sólo puede tomar los valores 'bow', 'tfidf', 'we' y 'transformers'")
@@ -68,7 +69,8 @@ if __name__ == "__main__":
         joblib.dump(documentos_preprocesados, output_file)
     
 
-    if command == "classify":
+    elif command == "classify":
+        print("[*] Tarea de clasificación en marcha")
         input_file = input_file.split(",")
 
         # obtener los datos de entrenamiento
@@ -87,22 +89,38 @@ if __name__ == "__main__":
         # guardar modelo
         joblib.dump(modelo, output_file)
 
-    if command == "clustering":
-        input_file = input_file.split(",")
+    elif command == "clustering":
+        print("[*] Tarea de clustering en marcha...")
 
         # obtener los datos de entrenamiento
-        datos = joblib.load(input_file[1])
+        X_matrix = joblib.load(input_file)
+        matriz_np = np.array(X_matrix)
+        print(type(X_matrix))  # <class 'list'>
 
-        asig_clusters = clustering.kmeans(datos, int(parameters))
+        asig_clusters = clustering.kmeans(X_matrix, int(parameters))
 
-        df = pd.read_csv(input_file[0])
+        # obtener los valores máximos y minimos de los vectores para escalar los valores de pertenencia
+        valor_maximo = np.max(matriz_np)
+        valor_minimo = np.min(matriz_np)
 
-        # Añadir la columna de clusters al DataFrame
-        df['Cluster'] = asig_clusters
+        # crear K columnas y llenarlas en función de pertenencia al cluster
+        valores_unicos = list(set(asig_clusters))
+        cont_valores_unicos = len(valores_unicos)
 
-        # Guardar el DataFrame actualizado en un nuevo archivo CSV
-        df.to_csv(output_file, index=False)
+        nueva_columna = np.array([], dtype=np.float32)
+        for valor in valores_unicos:
+            for instancia in asig_clusters:
+                if instancia == valor:
+                    nueva_columna = np.append(nueva_columna, valor_maximo)
+                else:
+                    nueva_columna = np.append(nueva_columna, valor_minimo)
 
+            # añadir una columna por cada cluster
+            matriz_np = np.column_stack((matriz_np, nueva_columna))
+            nueva_columna = np.array([], dtype=np.float32)
+
+        # guardar la estructura matricial en el directorio de trabajo
+        joblib.dump(matriz_np, output_file)
 
     else:
         print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess', 'classify' o 'clustering'")

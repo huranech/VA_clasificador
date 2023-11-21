@@ -6,4 +6,4 @@ Para clasificar
 python .\main.py -i train.csv,bow.joblib -d classify -s gs_text34 -o modelo.joblib
 
 Para clustering
-python main.py -i train.csv,transformers.joblib -d clustering -s gs_text34 -p 12 -o csv_con_cluster.csv
+python main.py -i transformers.joblib -d clustering -s gs_text34 -p 12 -o clustering.joblib
