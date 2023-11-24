@@ -137,16 +137,18 @@ if __name__ == "__main__":
 
     elif command == "Q2":
         print("[*] Obteniendo resultados para Research Question 2...")
-
+        input_files = input_file.split(",")
         parameters = parameters.split(",")
         kmin = int(parameters[0])
         kmax = int(parameters[1])
 
         # configuración inicial del gráfico
-        ancho_barra = 0.35
+        ancho_barra = 0.1
+        indice = np.arange(len(input_files))
+        fscore_sin = []
+        fscore_con = []
 
         # iterar sobre los distintos tipos de preprocesado
-        input_files = input_file.split(",")
         for file in input_files:
             # calcular fscore del dataset original
             df = pd.read_csv("train.csv")
@@ -157,7 +159,8 @@ if __name__ == "__main__":
             y_labels = utiles.mapeo_a_numeros(y_labels)
 
             # realizar predicciones y obtener fscore
-            _, _, fscore_sin = classifier.devolver_fscore_svm(x_matrix, y_labels)
+            _, _, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels)
+            fscore_sin.append(fscore)
 
             # calcular fscore del dataset modificado
             if issparse(x_matrix):
@@ -188,12 +191,29 @@ if __name__ == "__main__":
                 nueva_columna = np.array([], dtype=np.float32)
             
             # obtener fscore de nuevo formato matricial
-            _, _, fscore_con = classifier.devolver_fscore_svm(matriz_np, y_labels)
+            _, _, fscore = classifier.devolver_fscore_svm(matriz_np, y_labels)
+            fscore_con.append(fscore)
 
-            # configurar gráfico
-            plt.bar("HOLA" + ancho_barra, fscore_sin, width=ancho_barra, color='orange', label='Naranja: sin clustering')
-            plt.bar("ADIOS" + ancho_barra, fscore_con, width=ancho_barra, color='blue', label='Azul: con clustering')
+        # configurar gráfico
+        plt.bar(indice - ancho_barra/2, fscore_sin, width=ancho_barra, color='orange', label='fscore original', alpha=0.7)
+        plt.bar(indice + ancho_barra/2, fscore_con, width=ancho_barra, color='blue', label='fscore añadiendo clusters como features', alpha=0.7)
 
+        # Configurar el eje x
+        plt.xlabel('Vectorización')
+        plt.ylabel('Fscore')
+        plt.title('Comparación de fscores entre datasets con y sin features adicionales referentes al clustering')
+
+        eje_x = []
+        for file in input_files:
+            posicion_punto = file.find('.')
+            eje_x.append(file[:posicion_punto])
+
+        plt.xticks(indice, eje_x)
+
+        # Mostrar la leyenda
+        plt.legend()
+        
+        plt.tight_layout()
         plt.show()
         print("[*] Resultados dibujados")
 
