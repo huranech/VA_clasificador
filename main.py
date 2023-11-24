@@ -2,6 +2,8 @@ import os
 import sys
 import getopt
 import joblib
+from matplotlib import pyplot as plt
+
 import utiles
 import clustering
 import classifier
@@ -184,6 +186,79 @@ if __name__ == "__main__":
             
             # obtener fscore de nuevo formato matricial
             _, _, fscore = classifier.devolver_fscore_svm(matriz_np, y_labels, output_file)
+
+    elif command == "doQ1":
+
+        if not os.path.exists(input_file):
+            print(f"[!]Error: El archivo {input_file} no existe.")
+            exit(0)
+
+        precisions = []
+        recalls = []
+        fscores = []
+
+        # cargar el CSV
+        df = pd.read_csv(input_file)
+
+        y_labels = df["gs_text34"]
+        y_labels = utiles.minimalist(y_labels)
+        y_labels = utiles.mapeo_a_numeros(y_labels)
+        documentos_crudos = df["open_response"]
+        documentos_preprocesados = preprocessor.preprocesar_texto(documentos_crudos)
+        tecnicas_vectorizacion = ["bow", "tfidf", "d2v", "transformers"]
+
+
+        for i in tecnicas_vectorizacion:
+            if i == "bow":
+                x_matrix = preprocessor.bow(documentos_preprocesados)
+            elif i == "tfidf":
+                x_matrix = preprocessor.tfidf(documentos_preprocesados)
+            elif i == "d2v":
+                x_matrix = preprocessor.we(documentos_preprocesados)
+            else:
+                x_matrix = preprocessor.transformers(documentos_preprocesados)
+
+            precision, recall, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels)
+            precisions.append(precision)
+            recalls.append(recall)
+            fscores.append(fscore)
+
+        # Configuración del gráfico
+        bar_width = 0.2
+        index = np.arange(len(tecnicas_vectorizacion))
+
+        # Gráfico de barras para la precisión
+        plt.subplot(3, 1, 1)
+        plt.bar(index, precisions, bar_width, color='b', label='Precision')
+        plt.xlabel('Técnicas de Vectorización')
+        plt.ylabel('Precision')
+        plt.title('Comparación de Precision para Técnicas de Vectorización')
+        plt.xticks(index, tecnicas_vectorizacion)
+        plt.legend()
+
+        # Gráfico de barras para el recall
+        plt.subplot(3, 1, 2)
+        plt.bar(index, recalls, bar_width, color='g', label='Recall')
+        plt.xlabel('Técnicas de Vectorización')
+        plt.ylabel('Recall')
+        plt.title('Comparación de Recall para Técnicas de Vectorización')
+        plt.xticks(index, tecnicas_vectorizacion)
+        plt.legend()
+
+        # Gráfico de barras para el F-score
+        plt.subplot(3, 1, 3)
+        plt.bar(index, fscores, bar_width, color='r', label='F-score')
+        plt.xlabel('Técnicas de Vectorización')
+        plt.ylabel('F-score')
+        plt.title('Comparación de F-score para Técnicas de Vectorización')
+        plt.xticks(index, tecnicas_vectorizacion)
+        plt.legend()
+
+        # Ajustar el diseño para evitar superposiciones
+        plt.tight_layout()
+
+        # Mostrar el gráfico
+        plt.show()
 
 
     else:
