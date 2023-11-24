@@ -48,3 +48,31 @@ def kmeans(datos, k):
     visualizar_clusters(datos_svd, etiquetas, centros)
 
     return etiquetas
+
+
+def buscarCodo(datos, kmin, kmax):
+    '''
+    '''
+    inercia = []
+
+    # barrer todos los K para encontrar un punto de codo
+    for k in range(kmin, kmax+1):
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(datos)
+        
+        # almacenar la inercia para cada resultado del k-means
+        inercia.append(kmeans.inertia_)
+
+    # calcular el punto de codo
+    tasa_cambio = np.diff(inercia)
+    punto_codo = np.argmax(tasa_cambio < -np.mean(tasa_cambio))
+
+    k_optimo = punto_codo + 1
+
+    # obtener el modelo k-means con el número de clusters que el algoritmo estima como óptimo
+    modelo_kmeans = KMeans(k_optimo)
+    modelo_kmeans.fit(datos)
+    etiquetas = modelo_kmeans.labels_
+    centros = modelo_kmeans.cluster_centers_
+
+    return etiquetas, centros
