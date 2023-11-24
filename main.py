@@ -191,7 +191,7 @@ if __name__ == "__main__":
             _, _, fscore_con = classifier.devolver_fscore_svm(matriz_np, y_labels)
 
             # configurar gráfico
-            plt.bar("HOLA", fscore_sin, width=ancho_barra, color='orange', label='Naranja: sin clustering')
+            plt.bar("HOLA" + ancho_barra, fscore_sin, width=ancho_barra, color='orange', label='Naranja: sin clustering')
             plt.bar("ADIOS" + ancho_barra, fscore_con, width=ancho_barra, color='blue', label='Azul: con clustering')
 
         plt.show()
