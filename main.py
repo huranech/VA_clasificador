@@ -8,6 +8,7 @@ import classifier
 import numpy as np
 import preprocessor
 import pandas as pd
+from sklearn.metrics import f1_score
 from scipy.sparse import issparse
 
 
@@ -130,6 +131,61 @@ if __name__ == "__main__":
         joblib.dump(matriz_np, output_file)
 
         print("[*] Tarea finalizada")
+
+
+    elif command == "q2":
+        print("[*] Obteniendo resultados para Research Question 2...")
+
+        parameters = parameters.split(",")
+        kmin = parameters[0]
+        kmax = parameters[1]
+
+        # iterar sobre los distintos tipos de preprocesado
+        input_files = input_file.split(",")
+        for file in input_files:
+            # calcular fscore del dataset original
+            df = pd.read_csv(input_file[0])
+            y_labels = df[select]
+            x_matrix = joblib.load(input_file[1])
+
+            y_labels = utiles.minimalist(y_labels)
+            y_labels = utiles.mapeo_a_numeros(y_labels)
+
+            # realizar predicciones y obtener fscore
+            _, _, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels, output_file)
+
+            # calcular fscore del dataset modificado
+            if issparse(x_matrix):
+                matriz_np = x_matrix.toarray()
+            else:
+                matriz_np = np.array(x_matrix)
+
+            asig_clusters = clustering.buscarCodo(x_matrix, kmin, kmax)
+
+            # obtener los valores máximos y minimos de los vectores para escalar los valores de pertenencia
+            valor_maximo = np.max(matriz_np)
+            valor_minimo = np.min(matriz_np)
+
+            # crear K columnas y llenarlas en función de pertenencia al cluster
+            valores_unicos = list(set(asig_clusters))
+            cont_valores_unicos = len(valores_unicos)
+
+            nueva_columna = np.array([], dtype=np.float32)
+            for valor in valores_unicos:
+                for instancia in asig_clusters:
+                    if instancia == valor:
+                        nueva_columna = np.append(nueva_columna, valor_maximo)
+                    else:
+                        nueva_columna = np.append(nueva_columna, valor_minimo)
+
+                # añadir una columna por cada cluster
+                matriz_np = np.column_stack((matriz_np, nueva_columna))
+                nueva_columna = np.array([], dtype=np.float32)
+            
+            # obtener fscore de nuevo formato matricial
+            _, _, fscore = classifier.devolver_fscore_svm(matriz_np, y_labels, output_file)
+
+
     else:
         print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess', 'classify' o 'clustering'")
         exit(0)

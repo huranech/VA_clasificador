@@ -73,6 +73,5 @@ def buscarCodo(datos, kmin, kmax):
     modelo_kmeans = KMeans(k_optimo)
     modelo_kmeans.fit(datos)
     etiquetas = modelo_kmeans.labels_
-    centros = modelo_kmeans.cluster_centers_
 
-    return etiquetas, centros
+    return etiquetas
