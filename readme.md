@@ -9,4 +9,4 @@ Para clustering
 python main.py -i tfidf.joblib -d clustering -s gs_text34 -p 12 -o clustering.joblib
 
 Para RQ2
-python main.py -i tfidf.joblib -d Q2 -s gs_text34 -p 2,48 -o clustering.joblib
+python main.py -i bow.joblib -d Q2 -s gs_text34 -p 2,48 -o Q2.joblib

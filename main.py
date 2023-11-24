@@ -135,26 +135,29 @@ if __name__ == "__main__":
         print("[*] Tarea finalizada")
 
 
-    elif command == "q2":
+    elif command == "Q2":
         print("[*] Obteniendo resultados para Research Question 2...")
 
         parameters = parameters.split(",")
-        kmin = parameters[0]
-        kmax = parameters[1]
+        kmin = int(parameters[0])
+        kmax = int(parameters[1])
+
+        # configuración inicial del gráfico
+        ancho_barra = 0.35
 
         # iterar sobre los distintos tipos de preprocesado
         input_files = input_file.split(",")
         for file in input_files:
             # calcular fscore del dataset original
-            df = pd.read_csv(input_file[0])
+            df = pd.read_csv("train.csv")
             y_labels = df[select]
-            x_matrix = joblib.load(input_file[1])
+            x_matrix = joblib.load(file)
 
             y_labels = utiles.minimalist(y_labels)
             y_labels = utiles.mapeo_a_numeros(y_labels)
 
             # realizar predicciones y obtener fscore
-            _, _, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels, output_file)
+            _, _, fscore_sin = classifier.devolver_fscore_svm(x_matrix, y_labels)
 
             # calcular fscore del dataset modificado
             if issparse(x_matrix):
@@ -185,7 +188,14 @@ if __name__ == "__main__":
                 nueva_columna = np.array([], dtype=np.float32)
             
             # obtener fscore de nuevo formato matricial
-            _, _, fscore = classifier.devolver_fscore_svm(matriz_np, y_labels, output_file)
+            _, _, fscore_con = classifier.devolver_fscore_svm(matriz_np, y_labels, output_file)
+
+            # configurar gráfico
+            plt.bar("HOLA", fscore_sin, width=ancho_barra, color='orange', label='Naranja: sin clustering')
+            plt.bar("ADIOS" + ancho_barra, fscore_con, width=ancho_barra, color='blue', label='Azul: con clustering')
+
+        plt.show()
+        print("[*] Resultados dibujados")
 
     elif command == "doQ1":
 
@@ -262,5 +272,5 @@ if __name__ == "__main__":
 
 
     else:
-        print("f[!]Error: el parámetro -d no es válido. Debe ser 'preprocess', 'classify' o 'clustering'")
+        print("[!]Error: el parámetro -d no es válido. Debe ser 'preprocess', 'classify' o 'clustering'")
         exit(0)
