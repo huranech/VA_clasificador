@@ -255,7 +255,7 @@ if __name__ == "__main__":
 
 
         # configurar gráfico
-        for i in range(3):
+        for i in range(4):
             precisions[i] = precisions[i] * 100
             recalls[i] = recalls[i] * 100
             fscores[i] = fscores[i] * 100
