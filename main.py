@@ -252,37 +252,49 @@ if __name__ == "__main__":
             recalls.append(recall)
             fscores.append(fscore)
         print(precisions, recalls, fscores)
-        # Configuración del gráfico
+
+
+        # configurar gráfico
+        for i in range(3):
+            precisions[i] = precisions[i] * 100
+            recalls[i] = recalls[i] * 100
+            fscores[i] = fscores[i] * 100
+
         bar_width = 0.2
+        plt.clf()
         colors = ['#1f77b4', '#2ca02c', '#ff7f0e']
         index = np.arange(len(tecnicas_vectorizacion))
 
-        # Gráfico de barras
-        plt.bar(index, precisions, bar_width, color=colors[0], label='Precision', alpha=0.7)
-        plt.bar(index, recalls, bar_width, color=colors[1], label='Recall', alpha=0.7, bottom=precisions)
-        plt.bar(index, fscores, bar_width, color=colors[2], label='F-score', alpha=0.7, bottom=precisions + recalls)
+        bar_positions = index - bar_width / 2  # Definir las posiciones de las barras
 
-        # Etiquetas y leyenda
-        plt.xlabel('Técnicas de Vectorización')
-        plt.ylabel('Métricas')
+        plt.bar(bar_positions, precisions, width=bar_width, color=colors[0], label='precision', alpha=0.7)
+        plt.bar(bar_positions + bar_width, recalls, width=bar_width, color=colors[1], label='recall', alpha=0.7)
+        plt.bar(bar_positions + 2 * bar_width, fscores, width=bar_width, color=colors[2], label='fscore', alpha=0.7)
+
+        # Configurar el eje x
+        plt.xlabel('Vectorización')
         plt.title('Comparación de Métricas para Técnicas de Vectorización')
         plt.xticks(index, tecnicas_vectorizacion)
+        # Mostrar la leyenda
         plt.legend()
 
         # Mostrar los valores específicos en cada barra
         for i, value in enumerate(precisions):
-            plt.text(i, value / 2, f'{value:.2f}', ha='center', va='center', fontsize=8, color='white')
+            plt.text(bar_positions[i], value / 2, f'{value:.2f}', ha='center', va='center', fontsize=8, color='white')
+
         for i, value in enumerate(recalls):
-            plt.text(i, (precisions[i] + value / 2), f'{value:.2f}', ha='center', va='center', fontsize=8, color='white')
+            plt.text(bar_positions[i] + bar_width, (precisions[i] + value / 2), f'{value:.2f}', ha='center',
+                     va='center', fontsize=8, color='white')
+
         for i, value in enumerate(fscores):
-            plt.text(i, (precisions[i] + recalls[i] + value / 2), f'{value:.2f}', ha='center', va='center', fontsize=8,
-                     color='white')
+            plt.text(bar_positions[i] + 2 * bar_width, (precisions[i] + recalls[i] + value / 2), f'{value:.2f}',
+                     ha='center', va='center', fontsize=8, color='white')
 
         # Ajustar el diseño para evitar superposiciones
         plt.tight_layout()
 
         # Mostrar el gráfico
-        plt.show()
+        plt.savefig("q1_grafico.png")
 
 
     else:
