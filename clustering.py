@@ -5,6 +5,11 @@ from sklearn.decomposition import TruncatedSVD  # Cambio de PCA a TruncatedSVD
 
 def realizar_svd(datos, n_componentes=2):
     '''
+    Precondición:
+        datos es una lista de estructuras vectoriales.
+        n_componentes es un entero mayor que 0. Por defecto n_componentes es 2
+    Poscondición:
+        devuelve una lista de estructuras vectoriales de n dimensiones
     '''
     svd = TruncatedSVD(n_components=n_componentes)
     datos_svd = svd.fit_transform(datos)
@@ -14,7 +19,11 @@ def realizar_svd(datos, n_componentes=2):
 def entrenar_kmeans(datos, k):
     '''
     Precondición:
+        datos es una lista de estructuras vectoriales.
+        k es un número entero mayor que 0.
     Poscondición:
+        devuelve una lista de etiquetas que representan los clusters asignados a cada instancia.
+        devuelve también los centroides de cada cluster.
     '''
     # Crear un modelo de k-means
     modelo_kmeans = KMeans(n_clusters=k)
@@ -31,6 +40,12 @@ def entrenar_kmeans(datos, k):
 
 def visualizar_clusters(datos, etiquetas, centros):
     '''
+    Precondición:
+        datos es una lista de vectores de 2 dimensiones.
+        etiquetas es una lista de números que representan la pertenencia de cada instancia a un cluster.
+        centros son los centroides de cada cluster.
+    Poscondición:
+        se muestra un gráfico que representa instancias en forma de puntos y clusters en forma de colores.
     '''
     plt.scatter(datos[:, 0], datos[:, 1], c=etiquetas, cmap='viridis')
     plt.scatter(centros[:, 0], centros[:, 1], marker='X', s=200, linewidths=2, color='red')
@@ -40,6 +55,11 @@ def visualizar_clusters(datos, etiquetas, centros):
 
 def kmeans(datos, k):
     '''
+    Precondición:
+        datos es una lista de vectores. Cada vector pertenece a una instancia.
+        k es un número entero mayor que 0.
+    Poscondición:
+        devuelve una lista de etiquetas que representan los clusters asignados a cada instancia.
     '''
     datos_svd = realizar_svd(datos, n_componentes=2)
 
@@ -54,6 +74,12 @@ def kmeans(datos, k):
 
 def buscarCodo(datos, kmin, kmax):
     '''
+    Precondición:
+        datos es una lista de estructuras vectoriales.
+        kmin y kmax son enteros.
+        0 < kmin < kmax
+    Poscondición:
+
     '''
     inercia = []
 
