@@ -247,11 +247,11 @@ if __name__ == "__main__":
             else:
                 x_matrix = preprocessor.transformers(documentos_preprocesados)
 
-            precision, recall, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels)
+            precision, recall, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels, i)
             precisions.append(precision)
             recalls.append(recall)
             fscores.append(fscore)
-
+        print(precisions, recalls, fscores)
         # Configuración del gráfico
         bar_width = 0.2
         colors = ['#1f77b4', '#2ca02c', '#ff7f0e']
