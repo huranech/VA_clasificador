@@ -1,6 +1,6 @@
-import string
 import nltk
 import torch
+import string
 import pandas as pd
 from nltk.corpus import wordnet
 from nltk.corpus import stopwords
@@ -93,8 +93,6 @@ def lematizar(texto):
     Postcondiciones:
         La función lematiza las palabras en el texto, utilizando la categoría gramatical apropiada, y devuelve el texto lematizado.
     '''
-
-
     texto = nltk.word_tokenize(texto)
     
     # Inicializar el lematizador
@@ -132,6 +130,12 @@ def eliminarSiNoInfo(texto, n_palabras):
 
 def preprocesar_texto(texto_crudo):
     '''
+        Precondición:
+            texto_crudo es una lista de documentos que no han recibido ningún preproceso.
+        Poscondición:
+            Devuelve la lista de documentos recibida como parámetro sin signos de puntuación,
+            sin mayúsculas, sin stopwords y con las palabras en su forma raíz.
+            Ningún documento que estuviese formado por sólo 3 palabras se tendrá en cuenta.
     '''
     listaFilas = []
     for i, texto in texto_crudo.items():
@@ -149,6 +153,10 @@ def preprocesar_texto(texto_crudo):
 
 def bow(documentos):
     '''
+    Precondición:
+        documentos es una lista de strings.
+    Poscondición:
+        Devuelve la representación vectorial Bag Of Words para documentos en forma de matriz.
     '''
     vectorizer = CountVectorizer()
     bagofwords = vectorizer.fit_transform(documentos)
@@ -159,6 +167,10 @@ def bow(documentos):
 
 def tfidf(documentos):
     '''
+    Precondición:
+        documentos es una lista de strings.
+    Poscondición:
+        Devuelve la representación vectorial tf-idf para documentos en forma de matriz.
     '''
     # Crear un vectorizador TF-IDF
     vectorizador = TfidfVectorizer()
@@ -172,6 +184,10 @@ def tfidf(documentos):
 
 def we(documentos):
     '''
+    Precondición:
+        documentos es una lista de strings.
+    Poscondición:
+        Devuelve el word embedding de los documentos, entrenados por un modelo doc2vec.
     '''
     tokenized_data = [doc.split() for doc in documentos]
     tagged_data = [TaggedDocument(words=words, tags=[str(idx)]) for idx, words in enumerate(tokenized_data)]
@@ -189,6 +205,12 @@ def we(documentos):
 
 def transformers(documentos):
     '''
+    Precondición:
+        documentos es una lista de strings.
+    Poscondición:
+        La función devuelve una lista de representaciones numéricas de los documentos proporcionados.
+        Cada elemento de la lista es un array NumPy que representa la representación del 
+        documento correspondiente.
     '''
     # Cargar el modelo preentrenado y el tokenizador
     modelo_nombre = "bert-base-uncased"
