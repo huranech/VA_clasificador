@@ -13,6 +13,8 @@ def realizar_svd(datos, n_componentes=2):
 
 def entrenar_kmeans(datos, k):
     '''
+    Precondición:
+    Poscondición:
     '''
     # Crear un modelo de k-means
     modelo_kmeans = KMeans(n_clusters=k)
