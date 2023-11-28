@@ -36,6 +36,10 @@ python .\main.py -i train.csv -d preprocess -s open_response -o we.joblib -p we
 ```bash
 python main.py -i bow.joblib,tfidf.joblib,we.joblib,transformers.joblib -d Q2 -s gs_text34 -p 2,15
 ```
+```bash
+python main.py -i <tecnica_vectorizacion1>.joblib,<tecnica_vectorizacion2>.joblib,...,<tecnica_vectorizacionN>.joblib -d Q2 -s gs_text34 -p <kmin>,<kmax>
+```
+
 ## Para RQ1
 ```bash
 python main.py -i train.csv -d doQ1
