@@ -281,15 +281,16 @@ if __name__ == "__main__":
 
         # Mostrar los valores específicos en cada barra
         for i, value in enumerate(precisions):
-            plt.text(bar_positions[i], value / 2, f'{value:.2f}', ha='center', va='center', fontsize=8, color='white')
+            plt.text(bar_positions[i], value + 0.02, f'{value:.2f}', ha='center', va='bottom', fontsize=8,
+                     color='white')
 
         for i, value in enumerate(recalls):
-            plt.text(bar_positions[i] + bar_width, (precisions[i] + value / 2), f'{value:.2f}', ha='center',
-                     va='center', fontsize=8, color='white')
+            plt.text(bar_positions[i] + bar_width, value + 0.02, f'{value:.2f}', ha='center', va='bottom', fontsize=8,
+                     color='white')
 
         for i, value in enumerate(fscores):
-            plt.text(bar_positions[i] + 2 * bar_width, (precisions[i] + recalls[i] + value / 2), f'{value:.2f}',
-                     ha='center', va='center', fontsize=8, color='white')
+            plt.text(bar_positions[i] + 2 * bar_width, value + 0.02, f'{value:.2f}', ha='center', va='bottom',
+                     fontsize=8, color='white')
 
         # Ajustar el diseño para evitar superposiciones
         plt.tight_layout()
