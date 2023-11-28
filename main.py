@@ -178,8 +178,6 @@ if __name__ == "__main__":
             valores_unicos = list(set(asig_clusters))
             cont_valores_unicos = len(valores_unicos)
 
-            print(f"{file} tiene {cont_valores_unicos} clusters")
-
             nueva_columna = np.array([], dtype=np.float32)
             for valor in valores_unicos:
                 for instancia in asig_clusters:
@@ -197,6 +195,7 @@ if __name__ == "__main__":
             fscore_con.append(fscore)
 
         # configurar gráfico
+        plt.clf()
         plt.bar(indice - ancho_barra/2, fscore_sin, width=ancho_barra, color='orange', label='fscore original', alpha=0.7)
         plt.bar(indice + ancho_barra/2, fscore_con, width=ancho_barra, color='blue', label='fscore añadiendo clusters como features', alpha=0.7)
 

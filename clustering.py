@@ -92,11 +92,12 @@ def buscarCodo(datos, kmin, kmax):
         inercia.append(kmeans.inertia_)
 
     # calcular el punto de codo
-    tasa_cambio = np.diff(inercia)
-    punto_codo = np.argmax(tasa_cambio < -np.mean(tasa_cambio))
+    deltas = np.diff(inercia, 2)
+    punto_codo = np.argmax(deltas) + kmin
 
-    k_optimo = punto_codo + 1
+    k_optimo = punto_codo
 
+    print(f"k_optimo = {k_optimo}")
     # obtener el modelo k-means con el número de clusters que el algoritmo estima como óptimo
     modelo_kmeans = KMeans(k_optimo)
     modelo_kmeans.fit(datos)
