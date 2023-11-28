@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
         # guardar estructura de datos en el directorio de trabajo
         joblib.dump(documentos_preprocesados, output_file)
-        print("[*] Preproceso completado")
+        print(f"[*] Preproceso completado.")
     
 
     elif command == "classify":
@@ -159,7 +159,7 @@ if __name__ == "__main__":
             y_labels = utiles.mapeo_a_numeros(y_labels)
 
             # realizar predicciones y obtener fscore
-            _, _, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels)
+            _, _, fscore = classifier.devolver_fscore_svm(x_matrix, y_labels, file)
             fscore_sin.append(fscore)
 
             # calcular fscore del dataset modificado
@@ -178,6 +178,8 @@ if __name__ == "__main__":
             valores_unicos = list(set(asig_clusters))
             cont_valores_unicos = len(valores_unicos)
 
+            print(f"{file} tiene {cont_valores_unicos} clusters")
+
             nueva_columna = np.array([], dtype=np.float32)
             for valor in valores_unicos:
                 for instancia in asig_clusters:
@@ -191,7 +193,7 @@ if __name__ == "__main__":
                 nueva_columna = np.array([], dtype=np.float32)
             
             # obtener fscore de nuevo formato matricial
-            _, _, fscore = classifier.devolver_fscore_svm(matriz_np, y_labels)
+            _, _, fscore = classifier.devolver_fscore_svm(matriz_np, y_labels, file)
             fscore_con.append(fscore)
 
         # configurar gráfico

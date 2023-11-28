@@ -177,8 +177,8 @@ def tfidf(documentos):
 
     # Ajustar el vectorizador a los documentos recibidos como parámetro
     matriz_tfidf = vectorizador.fit_transform(documentos)
-
     print(matriz_tfidf.shape)
+
     return matriz_tfidf
 
 
@@ -199,6 +199,7 @@ def we(documentos):
 
     # Obtener los vectores de los documentos
     vectores_documentos = [model.infer_vector(words) for words in tokenized_data]
+    print(len(vectores_documentos[5]))
 
     return vectores_documentos
 
@@ -231,5 +232,7 @@ def transformers(documentos):
         representacion_documento = torch.mean(salida.last_hidden_state, dim=1).squeeze().numpy()
         representaciones.append(representacion_documento)
         i += 1
+
+    print(len(representaciones[5]))
 
     return representaciones
